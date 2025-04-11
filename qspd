@@ -1,0 +1,36 @@
+const puppeteer = require('puppeteer');
+
+(async () => {
+  try {
+    // Запускаем браузер
+    const browser = await puppeteer.launch();
+    
+    // Создаем новую страницу
+    const page = await browser.newPage();
+    
+    // Переходим на нужный URL
+    await page.goto('example', {
+      waitUntil: 'networkidle0' // Ждем завершения сетевых запросов
+    });
+    
+    // Генерируем PDF
+    await page.pdf({
+      path: 'page.pdf',    // Путь для сохранения файла
+      format: 'A4',        // Формат страницы
+      margin: {            // Отступы
+        top: '20mm',
+        right: '20mm',
+        bottom: '20mm',
+        left: '20mm'
+      },
+      printBackground: true // Печатать фоновые изображения
+    });
+    
+    console.log('PDF успешно создан!');
+    
+    // Закрываем браузер
+    await browser.close();
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+  }
+})();
